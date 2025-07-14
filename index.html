@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contagem para te ver 🕰️❤️</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #fce4ec, #f8bbd0);
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+      color: #880e4f;
+      overflow-x: hidden;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .timer {
+      font-size: 2rem;
+      margin-top: 20px;
+    }
+    .bar-container {
+      width: 80%;
+      background: #ffe4f0;
+      margin: 20px auto;
+      border-radius: 10px;
+    }
+    .bar {
+      height: 20px;
+      background: #ad1457;
+      border-radius: 10px;
+      width: 0%;
+    }
+    .frase, .frase-final {
+      font-size: 1.3rem;
+      margin-top: 25px;
+      background: rgba(255, 255, 255, 0.4);
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+    .file-upload {
+      margin-top: 20px;
+    }
+    #userPhoto {
+      margin-top: 15px;
+      max-width: 80%;
+      border-radius: 10px;
+    }
+    .falling {
+      position: fixed;
+      top: -50px;
+      font-size: 30px;
+      animation: fall 5s linear infinite;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
+      }
+    }
+    .message-waterfall {
+      font-size: 20px;
+      color: #d81b60;
+      animation: scrollMessage 20s linear infinite;
+      white-space: nowrap;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    @keyframes scrollMessage {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="primeira-parte">
+    <h1>Contagem regressiva para te ver ❤️</h1>
+    <div class="timer" id="countdown"></div>
+    <div class="bar-container">
+      <div class="bar" id="progressBar"></div>
+    </div>
+    <p id="percent"></p>
+    <img src="1000324731.jpg" alt="Nós dois juntos" />
+    <div class="frase">
+      Longe ou perto, você sempre está nos meus pensamentos!!<br />
+      Logo logo vamos nos ver!! Eu te amo minha princesa!! ♥️🫶🏻🥺
+    </div>
+    <audio id="mainAudio" controls autoplay loop>
+      <source src="Luan Santana - Chuva de arroz (DVD Luan Santana Acústico)(MP3_160K).mp3" type="audio/mpeg" />
+    </audio>
+  </div>
+
+  <div class="reencontro" style="display:none">
+    <div class="frase-final">
+      Chegou o dia! Finalmente juntos de novo, minha princesa! 💖🥹
+    </div>
+    <div class="file-upload">
+      <label for="photoInput">Adicione uma foto especial:</label><br />
+      <input type="file" id="photoInput" accept="image/*" /><br />
+      <img id="userPhoto" src="#" alt="Foto enviada" style="display:none;" />
+    </div>
+    <audio id="finalAudio" autoplay loop>
+      <source src="Matheus _ Kauan_ Anitta - Ao Vivo E A Cores ft. Anitta(MP3_160K).mp3" type="audio/mpeg" />
+    </audio>
+    <div class="message-waterfall">
+      Eu te amo ❤️ | I love you 🤍 | Te quiero 🫶🏻 | Ich liebe dich 🥹 | Je t'aime 😻 | Ti amo ♥️ | Eu te amo ❤️
+    </div>
+  </div>
+
+  <script>
+    const startDate = new Date("2025-07-09T00:00:00").getTime();
+    const finalDate = new Date("2025-07-25T14:00:00").getTime();
+    const totalDuration = finalDate - startDate;
+
+    const countdown = document.getElementById("countdown");
+    const progressBar = document.getElementById("progressBar");
+    const percent = document.getElementById("percent");
+    const mainAudio = document.getElementById("mainAudio");
+    const finalAudio = document.getElementById("finalAudio");
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = finalDate - now;
+      const timePassed = now - startDate;
+
+      if (distance <= 0) {
+        document.querySelector(".primeira-parte").style.display = "none";
+        document.querySelector(".reencontro").style.display = "block";
+        mainAudio.pause();
+        finalAudio.play();
+        createEffects();
+        clearInterval(timer);
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      const pct = Math.min(100, Math.max(0, (timePassed / totalDuration) * 100));
+      progressBar.style.width = pct + "%";
+      percent.innerHTML = `Já se passou ${pct.toFixed(2)}% do tempo!`;
+    }
+
+    const timer = setInterval(updateCountdown, 1000);
+
+    function createEffects() {
+      const emojis = ['🤍','♥️','🥺','🫶🏻','😻','🥹'];
+      for (let i = 0; i < 50; i++) {
+        const elem = document.createElement("div");
+        elem.classList.add("falling");
+        elem.style.left = Math.random() * 100 + "vw";
+        elem.style.animationDelay = (Math.random() * 5) + "s";
+        elem.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        document.body.appendChild(elem);
+      }
+    }
+
+    document.getElementById("photoInput").addEventListener("change", function(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const img = document.getElementById("userPhoto"); 
+        img.src = reader.result;
+        img.style.display = "block";
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    });
+
+
+  </script>
+</body>
+</html>
+
